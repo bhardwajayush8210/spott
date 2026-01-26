@@ -1,8 +1,8 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { ca } from "date-fns/locale/ca";
-import { sl } from "date-fns/locale/sl";
-import { QrCode } from "lucide-react";
+// import { ca } from "date-fns/locale/ca";
+// import { sl } from "date-fns/locale/sl";
+// import { QrCode } from "lucide-react";
 
 export default defineSchema({
   //Users Table
@@ -17,7 +17,7 @@ export default defineSchema({
     location: v.optional(
       v.object({
         city: v.string(),
-        state: v.string(),
+        state: v.optional(v.string()),
         country: v.string(),
       }),
     ),
@@ -39,7 +39,7 @@ export default defineSchema({
     slug: v.string(),
 
     // Organizer
-    organizerId: v.string(), //user ID of organizer
+    organizerId: v.id("users"), //user ID of organizer
     organizerName: v.string(),
 
     // Event Details
@@ -52,11 +52,12 @@ export default defineSchema({
     timezone: v.string(),
 
     // Location
-    locationTpe: v.union(v.literal("physical"), v.literal("online")),
+    locationType: v.union(v.literal("physical"), v.literal("online")),
     venue: v.optional(v.string()),
     address: v.optional(v.string()),
-    city: v.optional(v.string()),
+    city: v.string(),
     state: v.optional(v.string()),
+    country: v.string(),
 
     // Capacity & Ticketing
     capacity: v.number(),
@@ -79,8 +80,8 @@ export default defineSchema({
     .searchIndex("search_title", { searchField: "title" }),
 
   registrations: defineTable({
-    eventId: v.string("events"),
-    userId: v.string("users"),
+    eventId: v.id("events"),
+    userId: v.id("users"),
 
     // Attendee Info
     attendeeName: v.string(),
@@ -91,7 +92,7 @@ export default defineSchema({
 
     // check-in
     checkedIn: v.boolean(),
-    checkInAt: v.optional(v.number()),
+    checkedInAt: v.optional(v.number()),
 
     //Status
     status: v.union(v.literal("confirmed"), v.literal("cancelled")),

@@ -17,7 +17,7 @@ It demonstrates real-world usage of **Next.js App Router, authentication, server
 
 ---
 
-## ✨ Highlights (Recruiter Snapshot)
+## ✨ Highlights 
 
 - ✅ Full-stack **Next.js + Convex** application
 - 🔐 Secure authentication using **Clerk**

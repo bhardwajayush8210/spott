@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useAuth,
-} from "@clerk/nextjs";
+import { SignInButton, useAuth, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Authenticated, Unauthenticated } from "convex/react";
 import { BarLoader } from "react-spinners";
 import { useStoreUser } from "@/hooks/use-store-user";
 import { Building, Crown, Plus, Ticket } from "lucide-react";
@@ -22,26 +17,30 @@ import { Badge } from "./ui/badge";
 
 const Header = () => {
   const { isLoading } = useStoreUser();
+
+  const [] = useState();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  const { showOnboarding, handleOnboardingComplete, handleOnboardingSkip } =
-    useOnboarding();
+  const {showOnboarding,handleOnboardingComplete,handleOnboardingSkip} = 
+  useOnboarding();
 
-  const { has } = useAuth();
+  const {has} = useAuth();
   const hasPro = has?.({ plan: "pro" });
 
+  
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-xl z-20 border-b">
+        {" "}
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
+          {/* logo */}
+          <Link href={"/"} className="flex items-center">
             <Image
               src="/spott.png"
               alt="Spott Logo"
               width={500}
               height={500}
-              className="h-11 w-auto"
+              className="w-full h-11"
               priority
             />
 
@@ -54,16 +53,16 @@ const Header = () => {
             )}
           </Link>
 
-          {/* Search & Location – Desktop */}
+          {/* Serach & Location - Desktop Only */}
           <div className="hidden md:flex flex-1 justify-center">
             <SearchLocationBar />
           </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center">
+          {/* Right Side Actions */}
+          <div className="flex items-center ">
             {!hasPro && (
               <Button
-                variant="ghost"
+                variant={"ghost"}
                 size="sm"
                 onClick={() => setShowUpgradeModal(true)}
               >
@@ -71,25 +70,24 @@ const Header = () => {
               </Button>
             )}
 
-            <Button variant="ghost" size="sm" asChild className="mr-2">
-              <Link href="/explore">Explore</Link>
+            <Button variant="ghost" size="sm" asChild className={"mr-2"}>
+              <Link href="explore">Explore</Link>
             </Button>
-
-            <SignedIn>
+            <Authenticated>
               <Button size="sm" asChild className="flex gap-2 mr-4">
                 <Link href="/create-event">
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">Create Event</span>
                 </Link>
               </Button>
-
-              <UserButton afterSignOutUrl="/">
+              <UserButton>
                 <UserButton.MenuItems>
                   <UserButton.Link
                     label="My Tickets"
                     labelIcon={<Ticket size={16} />}
                     href="/my-tickets"
                   />
+
                   <UserButton.Link
                     label="My Events"
                     labelIcon={<Building size={16} />}
@@ -98,25 +96,23 @@ const Header = () => {
                   <UserButton.Action label="manageAccount" />
                 </UserButton.MenuItems>
               </UserButton>
-            </SignedIn>
+            </Authenticated>
 
-            <SignedOut>
+            <Unauthenticated>
               <SignInButton mode="modal">
                 <Button size="sm">Sign In</Button>
               </SignInButton>
-            </SignedOut>
+            </Unauthenticated>
           </div>
         </div>
-
-        {/* Mobile Search */}
+        {/* mobile Search & Location - Below Header */}
         <div className="md:hidden border-t px-3 py-3">
           <SearchLocationBar />
         </div>
-
         {/* Loader */}
         {isLoading && (
           <div className="absolute bottom-0 left-0 w-full">
-            <BarLoader width="100%" color="#a855f7" />
+            <BarLoader width={"100%"} color="#a855f7" />
           </div>
         )}
       </nav>
